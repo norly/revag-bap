@@ -81,6 +81,8 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 				return NULL;
 			}
 
+			bap_frame->is_multiframe = 1;
+
 			header = (frame->data[2] << 8) | frame->data[3];
 			bap_frame->opcode = (header >> 12) & 0x7;
 			bap_frame->subnode = (header >> 6) & 0x3F;
@@ -155,6 +157,8 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 			return NULL;
 		}
 
+		bap_frame->is_multiframe = 0;
+
 		header = (frame->data[0] << 8) | frame->data[1];
 		bap_frame->opcode = (header >> 12) & 0x7;
 		bap_frame->subnode = (header >> 6) & 0x3F;
@@ -171,6 +175,17 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 }
 
 
+
+
+
+void vw_bap_frame_free(struct BAP_Frame *bap_frame)
+{
+	if (bap_frame->data) {
+		free(bap_frame->data);
+	}
+
+	free(bap_frame);
+}
 
 
 
@@ -191,14 +206,13 @@ struct BAP_RXer* vw_bap_alloc()
 
 void vw_bap_free(struct BAP_RXer *bap)
 {
-	/* TODO */
+	int i;
+
+	for (i = 0; i < 8; i++) {
+		if (bap->mfchannel[i]) {
+			vw_bap_frame_free(bap->mfchannel[i]);
+		}
+	}
+
 	free(bap);
-}
-
-
-
-void vw_bap_frame_free(struct BAP_Frame *bap_frame)
-{
-	/* TODO */
-	free(bap_frame);
 }

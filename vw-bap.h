@@ -11,6 +11,8 @@ typedef unsigned short BAP_FrameLen;
 
 
 struct BAP_Frame {
+	int is_multiframe;
+
 	BAP_OpCode opcode;
 	BAP_SubNode subnode;
 	BAP_SubFunction function;
@@ -33,10 +35,10 @@ void vw_bap_frame_dump(struct BAP_Frame *bap_frame);
 
 struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame);
 
-struct BAP_RXer* vw_bap_alloc();
-void vw_bap_free(struct BAP_RXer *bap);
 void vw_bap_frame_free(struct BAP_Frame *bap_frame);
 
+struct BAP_RXer* vw_bap_alloc();
+void vw_bap_free(struct BAP_RXer *bap);
 
 
 #endif
