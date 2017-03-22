@@ -15,13 +15,14 @@ struct BAP_Frame {
 	BAP_SubNode subnode;
 	BAP_SubFunction function;
 	BAP_FrameLen len;
-	BAP_FrameLen len_done;
+
 	char data[4096];
 };
 
 
 struct BAP_RXer {
 	struct BAP_Frame *mfchannel[8];
+	BAP_FrameLen len_done[8];
 };
 
 

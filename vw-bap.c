@@ -100,9 +100,9 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 			}
 
 			memcpy(&bap_frame->data[0], &frame->data[frame->can_dlc - this_len], this_len);
-			bap_frame->len_done = this_len;
+			bap->len_done[mfchannel] = this_len;
 
-			if (bap_frame->len_done == bap_frame->len) {
+			if (bap->len_done[mfchannel] == bap_frame->len) {
 				/* Frame is complete, remove from buffer */
 				bap->mfchannel[mfchannel] = NULL;
 				return bap_frame;
@@ -123,7 +123,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 
 			this_len = frame->can_dlc - 1;
 
-			if ((bap_frame->len_done + this_len) > bap_frame->len) {
+			if ((bap->len_done[mfchannel] + this_len) > bap_frame->len) {
 				printf("bap_handle_can_frame: len_done + this_len > len\n");
 
 				free(bap_frame);
@@ -132,12 +132,12 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 				return NULL;
 			}
 
-			memcpy(&bap_frame->data[bap_frame->len_done],
+			memcpy(&bap_frame->data[bap->len_done[mfchannel]],
 				&frame->data[frame->can_dlc - this_len],
 				this_len);
-			bap_frame->len_done += this_len;
+			bap->len_done[mfchannel] += this_len;
 
-			if (bap_frame->len_done == bap_frame->len) {
+			if (bap->len_done[mfchannel] == bap_frame->len) {
 				/* Frame is complete, remove from buffer */
 				bap->mfchannel[mfchannel] = NULL;
 				return bap_frame;
@@ -165,7 +165,6 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 		bap_frame->len = this_len;
 
 		memcpy(&bap_frame->data[0], &frame->data[frame->can_dlc - this_len], this_len);
-		bap_frame->len_done = this_len;
 
 		return bap_frame;
 	}
