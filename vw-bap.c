@@ -180,10 +180,6 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 
 void vw_bap_frame_free(struct BAP_Frame *bap_frame)
 {
-	if (bap_frame->data) {
-		free(bap_frame->data);
-	}
-
 	free(bap_frame);
 }
 
