@@ -8,7 +8,7 @@
 #include "vw-bap.h"
 
 
-void bap_frame_dump(struct BAP_Frame *bap_frame)
+void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
 {
 	unsigned i;
 
@@ -44,7 +44,7 @@ void bap_frame_dump(struct BAP_Frame *bap_frame)
 
 
 
-struct BAP_Frame* bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame)
+struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame)
 {
 	struct BAP_Frame *bap_frame = NULL;
 	unsigned short header;
@@ -175,7 +175,7 @@ struct BAP_Frame* bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *f
 
 
 
-struct BAP_RXer* bap_alloc()
+struct BAP_RXer* vw_bap_alloc()
 {
 	struct BAP_RXer *bap;
 
@@ -190,7 +190,7 @@ struct BAP_RXer* bap_alloc()
 
 
 
-void bap_free(struct BAP_RXer *bap)
+void vw_bap_free(struct BAP_RXer *bap)
 {
 	/* TODO */
 	free(bap);
@@ -198,7 +198,7 @@ void bap_free(struct BAP_RXer *bap)
 
 
 
-void bap_frame_free(struct BAP_Frame *bap_frame)
+void vw_bap_frame_free(struct BAP_Frame *bap_frame)
 {
 	/* TODO */
 	free(bap_frame);
