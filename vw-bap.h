@@ -11,6 +11,7 @@ typedef unsigned short BAP_FrameLen;
 
 
 struct BAP_Frame {
+	/* True if frame was/will be transmitted in multi-frame syntax */
 	int is_multiframe;
 
 	BAP_OpCode opcode;
@@ -23,7 +24,10 @@ struct BAP_Frame {
 
 
 struct BAP_RXer {
+	/* Temporary storage for incomplete frames */
 	struct BAP_Frame *mfchannel[8];
+
+	/* How many bytes have we already received on each channel? */
 	BAP_FrameLen len_done[8];
 };
 
