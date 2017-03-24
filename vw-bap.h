@@ -10,17 +10,46 @@ typedef unsigned char BAP_Function;
 typedef unsigned short BAP_FrameLen;
 
 
+/* A BAP frame at the BCL (BAP communication layer) as defined in
+ * http://www.itwissen.info/BCL-BAP-communication-layer.html
+ *
+ * This is basically BAP's equivalent of IP and TCP.
+ */
 struct BAP_Frame {
 	/* True if frame was/will be transmitted in multi-frame syntax */
 	int is_multiframe;
 
+
+	/* Request/reply, kind of */
 	BAP_OpCode opcode;
+
+	/* LSG = Logisches Steuergeraet
+	 * https://www.springerprofessional.de/technische-informatik/eingebettete-systeme/neues-protokoll-vereinfacht-kommunikation-von-steuergeraeten/6592480
+	 *
+	 * BAP's equivalent of an IP address (to be confirmed).
+	 *
+	 * Always the same per CAN ID in the (simple) devices I looked at.
+	 */
 	BAP_Node node;
+
+	/* The "RPC" function, or "status register" ID.
+	 *
+	 * BAP's equivalent of a "TCP port".
+	 */
 	BAP_Function function;
+
+	/* Payload length, up to 2^12 = 4096 bytes.
+	 *
+	 * 4095 bytes according to:
+	 * http://www.itwissen.info/BCL-BAP-communication-layer.html
+	 */
 	BAP_FrameLen len;
 
+
+	/* Payload */
 	char data[4096];
 };
+
 
 
 struct BAP_RXer {
