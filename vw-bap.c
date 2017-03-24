@@ -14,7 +14,7 @@ void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
 
 	printf("%u. %2i/%-2i .%02i --",
 		bap_frame->opcode,
-		bap_frame->subnode,
+		bap_frame->node,
 		bap_frame->function,
 		bap_frame->len);
 
@@ -85,7 +85,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 
 			header = (frame->data[2] << 8) | frame->data[3];
 			bap_frame->opcode = (header >> 12) & 0x7;
-			bap_frame->subnode = (header >> 6) & 0x3F;
+			bap_frame->node = (header >> 6) & 0x3F;
 			bap_frame->function = (header >> 0) & 0x3F;
 
 			bap_frame->len = ((frame->data[0] & 0xF) << 8) | frame->data[1];
@@ -161,7 +161,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 
 		header = (frame->data[0] << 8) | frame->data[1];
 		bap_frame->opcode = (header >> 12) & 0x7;
-		bap_frame->subnode = (header >> 6) & 0x3F;
+		bap_frame->node = (header >> 6) & 0x3F;
 		bap_frame->function = (header >> 0) & 0x3F;
 
 		this_len = frame->can_dlc - 2;

@@ -5,8 +5,8 @@
 
 
 typedef unsigned char BAP_OpCode;
-typedef unsigned char BAP_SubNode;
-typedef unsigned char BAP_SubFunction;
+typedef unsigned char BAP_Node;
+typedef unsigned char BAP_Function;
 typedef unsigned short BAP_FrameLen;
 
 
@@ -15,8 +15,8 @@ struct BAP_Frame {
 	int is_multiframe;
 
 	BAP_OpCode opcode;
-	BAP_SubNode subnode;
-	BAP_SubFunction function;
+	BAP_Node node;
+	BAP_Function function;
 	BAP_FrameLen len;
 
 	char data[4096];

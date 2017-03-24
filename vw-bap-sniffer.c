@@ -72,15 +72,15 @@ int main(int argc, char **argv)
 	int s;
 	unsigned can_id;
 	struct BAP_RXer *bap;
-	unsigned sub_node_id;
+	unsigned node_id;
 
 	if (argc < 4) {
-		printf("syntax: %s IFNAME CAN_ID SubNode \n", argv[0]);
+		printf("syntax: %s IFNAME CAN_ID bap_node \n", argv[0]);
 		return 1;
 	}
 
 	can_id = strtoul(argv[2], NULL, 0);
-	sub_node_id = strtoul(argv[3], NULL, 0);
+	node_id = strtoul(argv[3], NULL, 0);
 
 	bap = vw_bap_alloc();
 	if (!bap) {
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	printf("Listening for CAN ID: %x and SubNode %d\n", can_id, sub_node_id);
+	printf("Listening for CAN ID: %x and Node %d\n", can_id, node_id);
 
 
 
@@ -127,12 +127,12 @@ int main(int argc, char **argv)
 				unsigned i;
 
 				bap_frame = vw_bap_handle_can_frame(bap, &frame);
-				if (bap_frame && bap_frame->subnode == sub_node_id) {
+				if (bap_frame && bap_frame->node == node_id) {
 					mvprintw(bap_frame->function, 0, "");
 
 					printw("%u. %2i/%-2i .%02i --",
 						bap_frame->opcode,
-						bap_frame->subnode,
+						bap_frame->node,
 						bap_frame->function,
 						bap_frame->len);
 
