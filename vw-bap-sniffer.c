@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	can_id = strtoul(argv[2], NULL, 0);
 	node_id = strtoul(argv[3], NULL, 0);
 
-	bap = vw_bap_alloc();
+	bap = vw_bap_rxer_alloc();
 	if (!bap) {
 		printf("Out of memory allocating BAP struct.\n");
 		return 1;
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 
 	endwin();
 
-	vw_bap_free(bap);
+	vw_bap_rxer_free(bap);
 
 	close(s);
 

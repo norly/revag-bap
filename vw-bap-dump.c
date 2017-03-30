@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
 	for (i = 0; i < can_id_count; i++) {
 		can_ids[i] = strtoul(argv[2 + i], NULL, 0);
-		baps[i] = vw_bap_alloc();
+		baps[i] = vw_bap_rxer_alloc();
 		if (!baps[i]) {
 			printf("Out of memory allocating BAP struct.\n");
 			return 1;

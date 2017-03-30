@@ -185,7 +185,7 @@ void vw_bap_frame_free(struct BAP_Frame *bap_frame)
 
 
 
-struct BAP_RXer* vw_bap_alloc()
+struct BAP_RXer* vw_bap_rxer_alloc()
 {
 	struct BAP_RXer *bap;
 
@@ -200,7 +200,7 @@ struct BAP_RXer* vw_bap_alloc()
 
 
 
-void vw_bap_free(struct BAP_RXer *bap)
+void vw_bap_rxer_free(struct BAP_RXer *bap)
 {
 	int i;
 
