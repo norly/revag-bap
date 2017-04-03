@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 						printw("%c", c);
 					}
 					printw("'");
-					printw("\n");
+					printw("\r");
 
 					refresh();
 
