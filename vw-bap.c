@@ -8,6 +8,26 @@
 #include "vw-bap.h"
 
 
+
+struct BAP_Frame* vw_bap_frame_alloc(void)
+{
+	struct BAP_Frame* bap_frame;
+
+	bap_frame = calloc(1, sizeof(struct BAP_Frame));
+
+	return bap_frame;
+}
+
+
+void vw_bap_frame_free(struct BAP_Frame *bap_frame)
+{
+	free(bap_frame);
+}
+
+
+
+
+
 void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
 {
 	unsigned i;
@@ -75,7 +95,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 			}
 			bap->mfchannel[mfchannel] = NULL;
 
-			bap_frame = calloc(1, sizeof(struct BAP_Frame));
+			bap_frame = vw_bap_frame_alloc();
 			if (!bap_frame) {
 				printf("bap_handle_can_frame: Failed to allocate new frame\n");
 				return NULL;
@@ -175,13 +195,6 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 }
 
 
-
-
-
-void vw_bap_frame_free(struct BAP_Frame *bap_frame)
-{
-	free(bap_frame);
-}
 
 
 
