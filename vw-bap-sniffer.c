@@ -130,10 +130,11 @@ int main(int argc, char **argv)
 				if (bap_frame && bap_frame->node == node_id) {
 					mvprintw(bap_frame->function, 0, "");
 
-					printw("%u. %2i/%-2i .%02i --",
+					printw("%u. %2i/%-2i .%c%02i --",
 						bap_frame->opcode,
 						bap_frame->node,
 						bap_frame->function,
+						bap_frame->is_multiframe ? 'm' : 's',
 						bap_frame->len);
 
 					/* Limit huge packets */
