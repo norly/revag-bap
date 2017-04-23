@@ -1,6 +1,6 @@
 CFLAGS += -Wall -g
 
-BAPLIB = vw-bap.c vw-bap-frame.c
+BAPLIB = vw-bap.c vw-bap-frame.c vw-bap-rx.c
 
 all: vw-bap-dump vw-bap-sniffer
 
