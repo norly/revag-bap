@@ -62,14 +62,17 @@ struct BAP_RXer {
 
 
 
+/* BAP frame struct handling */
+struct BAP_Frame* vw_bap_frame_alloc(void);
+             void vw_bap_frame_free(struct BAP_Frame *bap_frame);
 
+int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame);
 
 void vw_bap_frame_dump(struct BAP_Frame *bap_frame);
 
+
+/* BAP reception */
 struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame);
-
-void vw_bap_frame_free(struct BAP_Frame *bap_frame);
-
 struct BAP_RXer* vw_bap_rxer_alloc();
 void vw_bap_rxer_free(struct BAP_RXer *bap);
 

@@ -9,60 +9,6 @@
 
 
 
-struct BAP_Frame* vw_bap_frame_alloc(void)
-{
-	struct BAP_Frame* bap_frame;
-
-	bap_frame = calloc(1, sizeof(struct BAP_Frame));
-
-	return bap_frame;
-}
-
-
-void vw_bap_frame_free(struct BAP_Frame *bap_frame)
-{
-	free(bap_frame);
-}
-
-
-
-
-
-void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
-{
-	unsigned i;
-
-	printf("%u. %2i/%-2i .%02i --",
-		bap_frame->opcode,
-		bap_frame->node,
-		bap_frame->function,
-		bap_frame->len);
-
-	for (i = 0; i < bap_frame->len; i++) {
-		if (!(i % 4)) {
-			printf(" ");
-		}
-		printf("%02x", (unsigned char)(bap_frame->data[i]));
-	}
-
-	printf("\n        '");
-	for (i = 0; i < bap_frame->len; i++) {
-		unsigned char c = bap_frame->data[i];
-		if (!isprint(c) || c == '\n' || c == '\r') {
-			c = '.';
-		}
-		printf("%c", c);
-	}
-	printf("'");
-
-	printf("\n");
-
-	fflush(stdout);
-}
-
-
-
-
 
 struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame)
 {
