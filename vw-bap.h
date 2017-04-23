@@ -38,11 +38,7 @@ struct BAP_Frame {
 	 */
 	BAP_Function function;
 
-	/* Payload length, up to 2^12 = 4096 bytes.
-	 *
-	 * 4095 bytes according to:
-	 * http://www.itwissen.info/BCL-BAP-communication-layer.html
-	 */
+	/* Payload length, up to 2^12-1 = 4095 bytes. */
 	BAP_FrameLen len;
 
 
