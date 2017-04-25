@@ -57,6 +57,11 @@ struct BAP_RXer {
 };
 
 
+struct BAP_TXer {
+
+};
+
+
 
 /* BAP frame struct handling */
 struct BAP_Frame* vw_bap_frame_alloc(void);
@@ -71,6 +76,11 @@ void vw_bap_frame_dump(struct BAP_Frame *bap_frame);
 struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame);
 struct BAP_RXer* vw_bap_rxer_alloc();
 void vw_bap_rxer_free(struct BAP_RXer *bap);
+
+
+/* BAP transmission */
+struct BAP_TXer* vw_bap_txer_alloc();
+void vw_bap_txer_free(struct BAP_TXer *bap);
 
 
 #endif
