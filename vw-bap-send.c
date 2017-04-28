@@ -74,12 +74,25 @@ static int net_init(char *ifname)
 
 
 
+static void can_tx(int socket, struct can_frame *frame)
+{
+	ssize_t ret;
+
+	ret = write(socket, frame, sizeof(*frame));
+	if (ret != sizeof(*frame)) {
+		perror("write to CAN socket");
+		exit(1);
+	}
+}
+
+
 
 
 int main(int argc, char **argv)
 {
   	fd_set wfds;
-	int s;
+	int s, ret;
+	struct can_frame frame;
 	struct BAP_TXer *bap;
 	struct BAP_Frame *bap_frame;
 	unsigned can_id;
@@ -155,6 +168,13 @@ int main(int argc, char **argv)
 	printf("Will send frame:\n");
 	vw_bap_frame_dump(bap_frame);
 
+	ret = vw_bap_txer_queue(bap, bap_frame, &frame);
+	frame.can_id = can_id;
+	can_tx(s, &frame);
+
+	/* HACK since we don't have continuation frames yet */
+	return 0;
+
 
 	while (1) {
 		int retval;
@@ -171,8 +191,6 @@ int main(int argc, char **argv)
 		} else if (!retval) {
 			/* Timeout, we NEED to check this first */
 		} else if (FD_ISSET(s, &wfds)) {
-			struct can_frame frame;
-			ssize_t ret;
 
 			continue;
 		}

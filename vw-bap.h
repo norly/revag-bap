@@ -58,7 +58,11 @@ struct BAP_RXer {
 
 
 struct BAP_TXer {
+	/* Temporary storage for frames not yet fully sent */
+	struct BAP_Frame *slot[4];
 
+	/* How many bytes have we already sent on each channel? */
+	BAP_FrameLen slot_done[4];
 };
 
 
@@ -68,6 +72,8 @@ struct BAP_Frame* vw_bap_frame_alloc(void);
              void vw_bap_frame_free(struct BAP_Frame *bap_frame);
 
 int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame);
+
+struct BAP_Frame* vw_bap_frame_clone(struct BAP_Frame *bap_frame);
 
 void vw_bap_frame_dump(struct BAP_Frame *bap_frame);
 
@@ -79,6 +85,7 @@ void vw_bap_rxer_free(struct BAP_RXer *bap);
 
 
 /* BAP transmission */
+int vw_bap_txer_queue(struct BAP_TXer* bap, struct BAP_Frame *bap_frame, struct can_frame *frame);
 struct BAP_TXer* vw_bap_txer_alloc();
 void vw_bap_txer_free(struct BAP_TXer *bap);
 

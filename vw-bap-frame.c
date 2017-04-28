@@ -39,6 +39,26 @@ int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame)
 }
 
 
+struct BAP_Frame* vw_bap_frame_clone(struct BAP_Frame *bap_frame)
+{
+	struct BAP_Frame *new_frame;
+
+	if (!vw_bap_frame_is_valid(bap_frame)) {
+		return NULL;
+	}
+
+	new_frame = vw_bap_frame_alloc();
+	if (!new_frame) {
+		return NULL;
+	}
+
+	memcpy(new_frame, bap_frame, sizeof(*new_frame));
+
+	return new_frame;
+}
+
+
+
 void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
 {
 	unsigned i;
