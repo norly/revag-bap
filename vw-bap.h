@@ -6,7 +6,7 @@
 
 typedef unsigned char BAP_OpCode;
 typedef unsigned char BAP_Node;
-typedef unsigned char BAP_Function;
+typedef unsigned char BAP_Port;
 typedef unsigned short BAP_FrameLen;
 
 
@@ -32,11 +32,11 @@ struct BAP_Frame {
 	 */
 	BAP_Node node;
 
-	/* The "RPC" function, or "status register" ID.
+	/* The "RPC" port, or "status register" ID.
 	 *
-	 * BAP's equivalent of a "TCP port".
+	 * BAP's equivalent of a "UDP port".
 	 */
-	BAP_Function function;
+	BAP_Port port;
 
 	/* Payload length, up to 2^12-1 = 4095 bytes. */
 	BAP_FrameLen len;

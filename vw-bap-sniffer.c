@@ -128,12 +128,12 @@ int main(int argc, char **argv)
 
 				bap_frame = vw_bap_handle_can_frame(bap, &frame);
 				if (bap_frame && bap_frame->node == node_id) {
-					mvprintw(bap_frame->function, 0, "");
+					mvprintw(bap_frame->port, 0, "");
 
 					printw("%u. %2i/%-2i .%c%02i --",
 						bap_frame->opcode,
 						bap_frame->node,
-						bap_frame->function,
+						bap_frame->port,
 						bap_frame->is_multiframe ? 'm' : 's',
 						bap_frame->len);
 
@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 					printw("\n");
 
 					/* ASCII dump */
-					mvprintw(bap_frame->function, 64, "");
+					mvprintw(bap_frame->port, 64, "");
 					for (i = 0; i < bap_frame->len; i++) {
 						unsigned char c = bap_frame->data[i];
 						if (!isprint(c) || c == '\n' || c == '\r') {

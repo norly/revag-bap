@@ -50,7 +50,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 			header = (frame->data[2] << 8) | frame->data[3];
 			bap_frame->opcode = (header >> 12) & 0x7;
 			bap_frame->node = (header >> 6) & 0x3F;
-			bap_frame->function = (header >> 0) & 0x3F;
+			bap_frame->port = (header >> 0) & 0x3F;
 
 			bap_frame->len = ((frame->data[0] & 0xF) << 8) | frame->data[1];
 
@@ -126,7 +126,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 		header = (frame->data[0] << 8) | frame->data[1];
 		bap_frame->opcode = (header >> 12) & 0x7;
 		bap_frame->node = (header >> 6) & 0x3F;
-		bap_frame->function = (header >> 0) & 0x3F;
+		bap_frame->port = (header >> 0) & 0x3F;
 
 		this_len = frame->can_dlc - 2;
 

@@ -18,7 +18,7 @@ static void vw_bap_txer_build_only_can_frame(struct BAP_Frame *bap_frame, struct
 	frame->data[0]  = (bap_frame->opcode & 0x7) << 4;
 	frame->data[0] |= (bap_frame->node & 0x3f) >> 2;
 	frame->data[1]  = (bap_frame->node & 0x3) << 6;
-	frame->data[1] |=  bap_frame->function & 0x3f;
+	frame->data[1] |=  bap_frame->port & 0x3f;
 
 	frame->can_dlc = 2 + bap_frame->len;
 	memcpy(&frame->data[2], bap_frame->data, bap_frame->len);
@@ -40,7 +40,7 @@ static void vw_bap_txer_build_first_can_frame(struct BAP_TXer* bap, unsigned slo
 	frame->data[2]  = (bap_frame->opcode & 0x7) << 4;
 	frame->data[2] |= (bap_frame->node & 0x3f) >> 2;
 	frame->data[3]  = (bap_frame->node & 0x3) << 6;
-	frame->data[3] |=  bap_frame->function & 0x3f;
+	frame->data[3] |=  bap_frame->port & 0x3f;
 
 	if (bap_frame->len <= 4) {
 		frame->can_dlc = 4 + bap_frame->len;

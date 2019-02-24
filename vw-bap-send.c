@@ -99,10 +99,10 @@ int main(int argc, char **argv)
 	unsigned bap_multiframe;
 	unsigned bap_opcode;
 	unsigned bap_node;
-	unsigned bap_function;
+	unsigned bap_port;
 
 	if (argc < 8) {
-		printf("syntax: %s IFNAME CAN_ID multiframe bap_opcode bap_node bap_function bap_data\n", argv[0]);
+		printf("syntax: %s IFNAME CAN_ID multiframe bap_opcode bap_node bap_port bap_data\n", argv[0]);
 		return 1;
 	}
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	bap_multiframe = strtoul(argv[3], NULL, 0);
 	bap_opcode = strtoul(argv[4], NULL, 0);
 	bap_node = strtoul(argv[5], NULL, 0);
-	bap_function = strtoul(argv[6], NULL, 0);
+	bap_port = strtoul(argv[6], NULL, 0);
 	/* bap_data */
 
 
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
 	bap_frame->is_multiframe = !(!bap_multiframe);
 	bap_frame->opcode = bap_opcode & 0x7;
 	bap_frame->node = bap_node & 0x3f;
-	bap_frame->function = bap_function & 0x3f;
+	bap_frame->port = bap_port & 0x3f;
 	bap_frame->len = 0;
 
 	/* Fill payload */

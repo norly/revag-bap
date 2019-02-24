@@ -28,7 +28,7 @@ int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame)
 	if ( 0
 		|| (bap_frame->opcode > 7)
 		|| (bap_frame->node > 63)
-		|| (bap_frame->function > 63)
+		|| (bap_frame->port > 63)
 		|| (bap_frame->len > 4095)
 		|| (!bap_frame->is_multiframe && bap_frame->len > 6)
 		) {
@@ -66,7 +66,7 @@ void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
 	printf("%u. %2i/%-2i .%02i --",
 		bap_frame->opcode,
 		bap_frame->node,
-		bap_frame->function,
+		bap_frame->port,
 		bap_frame->len);
 
 	for (i = 0; i < bap_frame->len; i++) {
