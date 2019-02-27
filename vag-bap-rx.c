@@ -5,10 +5,10 @@
 
 #include <linux/can.h>
 
-#include "vw-bap.h"
+#include "vag-bap.h"
 
 
-struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame)
+struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame *frame)
 {
 	struct BAP_Frame *bap_frame = NULL;
 	unsigned short header;
@@ -39,7 +39,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 			}
 			bap->mfchannel[mfchannel] = NULL;
 
-			bap_frame = vw_bap_frame_alloc();
+			bap_frame = vag_bap_frame_alloc();
 			if (!bap_frame) {
 				printf("bap_handle_can_frame: Failed to allocate new frame\n");
 				return NULL;
@@ -142,7 +142,7 @@ struct BAP_Frame* vw_bap_handle_can_frame(struct BAP_RXer *bap, struct can_frame
 
 
 
-struct BAP_RXer* vw_bap_rxer_alloc()
+struct BAP_RXer* vag_bap_rxer_alloc()
 {
 	struct BAP_RXer *bap;
 
@@ -157,13 +157,13 @@ struct BAP_RXer* vw_bap_rxer_alloc()
 
 
 
-void vw_bap_rxer_free(struct BAP_RXer *bap)
+void vag_bap_rxer_free(struct BAP_RXer *bap)
 {
 	int i;
 
 	for (i = 0; i < 8; i++) {
 		if (bap->mfchannel[i]) {
-			vw_bap_frame_free(bap->mfchannel[i]);
+			vag_bap_frame_free(bap->mfchannel[i]);
 		}
 	}
 

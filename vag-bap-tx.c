@@ -7,11 +7,11 @@
 
 #include <linux/can.h>
 
-#include "vw-bap.h"
+#include "vag-bap.h"
 
 
 
-static void vw_bap_txer_build_only_can_frame(struct BAP_Frame *bap_frame, struct can_frame *frame)
+static void vag_bap_txer_build_only_can_frame(struct BAP_Frame *bap_frame, struct can_frame *frame)
 {
 	assert(!bap_frame->is_multiframe);
 
@@ -25,7 +25,7 @@ static void vw_bap_txer_build_only_can_frame(struct BAP_Frame *bap_frame, struct
 }
 
 
-static void vw_bap_txer_build_first_can_frame(struct BAP_TXer* bap, unsigned slotnum, struct can_frame *frame)
+static void vag_bap_txer_build_first_can_frame(struct BAP_TXer* bap, unsigned slotnum, struct can_frame *frame)
 {
 	struct BAP_Frame *bap_frame = bap->slot[slotnum];
 
@@ -59,14 +59,14 @@ static void vw_bap_txer_build_first_can_frame(struct BAP_TXer* bap, unsigned slo
 
 
 
-int vw_bap_txer_queue(struct BAP_TXer* bap, struct BAP_Frame *bap_frame, struct can_frame *frame)
+int vag_bap_txer_queue(struct BAP_TXer* bap, struct BAP_Frame *bap_frame, struct can_frame *frame)
 {
-	if (!vw_bap_frame_is_valid(bap_frame)) {
+	if (!vag_bap_frame_is_valid(bap_frame)) {
 		return -EINVAL;
 	}
 
 	if (!bap_frame->is_multiframe) {
-		vw_bap_txer_build_only_can_frame(bap_frame, frame);
+		vag_bap_txer_build_only_can_frame(bap_frame, frame);
 		return 0;
 	} else { /* bap->frame->is_multiframe */
 		unsigned i;
@@ -82,12 +82,12 @@ int vw_bap_txer_queue(struct BAP_TXer* bap, struct BAP_Frame *bap_frame, struct 
 		}
 
 		/* Found empty slot */
-		bap->slot[i] = vw_bap_frame_clone(bap_frame);
+		bap->slot[i] = vag_bap_frame_clone(bap_frame);
 		if (!bap->slot[i]) {
 			return -ENOMEM;
 		}
 
-		vw_bap_txer_build_first_can_frame(bap, i, frame);
+		vag_bap_txer_build_first_can_frame(bap, i, frame);
 
 		if (bap->slot[i]) {
 			return 1;
@@ -99,7 +99,7 @@ int vw_bap_txer_queue(struct BAP_TXer* bap, struct BAP_Frame *bap_frame, struct 
 
 
 
-struct BAP_TXer* vw_bap_txer_alloc()
+struct BAP_TXer* vag_bap_txer_alloc()
 {
 	struct BAP_TXer *bap;
 
@@ -114,7 +114,7 @@ struct BAP_TXer* vw_bap_txer_alloc()
 
 
 
-void vw_bap_txer_free(struct BAP_TXer *bap)
+void vag_bap_txer_free(struct BAP_TXer *bap)
 {
 	free(bap);
 }

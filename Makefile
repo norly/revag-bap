@@ -1,13 +1,21 @@
 CFLAGS += -Wall -g
 
-BAPLIB = vw-bap.c vw-bap-frame.c vw-bap-rx.c vw-bap-tx.c
+BAPLIB = vag-bap.c vag-bap-frame.c vag-bap-rx.c vag-bap-tx.c
 
-all: vw-bap-dump vw-bap-sniffer vw-bap-send
+EXES = vag-bap-dump vag-bap-sniffer vag-bap-send
 
 
-vw-bap-dump: vw-bap-dump.c $(BAPLIB)
+all: $(EXES)
 
-vw-bap-sniffer: vw-bap-sniffer.c $(BAPLIB)
+
+vag-bap-dump: vag-bap-dump.c $(BAPLIB)
+
+vag-bap-sniffer: vag-bap-sniffer.c $(BAPLIB)
 	gcc -o $@ $^ -lncurses
 
-vw-bap-send: vw-bap-send.c $(BAPLIB)
+vag-bap-send: vag-bap-send.c $(BAPLIB)
+
+
+.PHONY: clean
+clean:
+	rm -f $(EXES)

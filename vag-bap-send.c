@@ -18,7 +18,7 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 
-#include "vw-bap.h"
+#include "vag-bap.h"
 
 
 static unsigned hex2bin(char c) {
@@ -115,13 +115,13 @@ int main(int argc, char **argv)
 	/* bap_data */
 
 
-	bap = vw_bap_txer_alloc();
+	bap = vag_bap_txer_alloc();
 	if (!bap) {
 		printf("Out of memory allocating BAP TXer struct.\n");
 		return 1;
 	}
 
-	bap_frame = vw_bap_frame_alloc();
+	bap_frame = vag_bap_frame_alloc();
 	if (!bap_frame) {
 		printf("Out of memory allocating BAP frame.\n");
 		return 1;
@@ -166,9 +166,9 @@ int main(int argc, char **argv)
 	/* Fill TXer */
 
 	printf("Will send frame:\n");
-	vw_bap_frame_dump(bap_frame);
+	vag_bap_frame_dump(bap_frame);
 
-	ret = vw_bap_txer_queue(bap, bap_frame, &frame);
+	ret = vag_bap_txer_queue(bap, bap_frame, &frame);
 	frame.can_id = can_id;
 	can_tx(s, &frame);
 
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
 
 
 
-	vw_bap_txer_free(bap);
+	vag_bap_txer_free(bap);
 
 	close(s);
 

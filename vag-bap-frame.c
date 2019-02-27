@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "vw-bap.h"
+#include "vag-bap.h"
 
 
 
-struct BAP_Frame* vw_bap_frame_alloc(void)
+struct BAP_Frame* vag_bap_frame_alloc(void)
 {
 	struct BAP_Frame* bap_frame;
 
@@ -17,13 +17,13 @@ struct BAP_Frame* vw_bap_frame_alloc(void)
 }
 
 
-void vw_bap_frame_free(struct BAP_Frame *bap_frame)
+void vag_bap_frame_free(struct BAP_Frame *bap_frame)
 {
 	free(bap_frame);
 }
 
 
-int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame)
+int vag_bap_frame_is_valid(struct BAP_Frame *bap_frame)
 {
 	if ( 0
 		|| (bap_frame->opcode > 7)
@@ -39,15 +39,15 @@ int vw_bap_frame_is_valid(struct BAP_Frame *bap_frame)
 }
 
 
-struct BAP_Frame* vw_bap_frame_clone(struct BAP_Frame *bap_frame)
+struct BAP_Frame* vag_bap_frame_clone(struct BAP_Frame *bap_frame)
 {
 	struct BAP_Frame *new_frame;
 
-	if (!vw_bap_frame_is_valid(bap_frame)) {
+	if (!vag_bap_frame_is_valid(bap_frame)) {
 		return NULL;
 	}
 
-	new_frame = vw_bap_frame_alloc();
+	new_frame = vag_bap_frame_alloc();
 	if (!new_frame) {
 		return NULL;
 	}
@@ -59,7 +59,7 @@ struct BAP_Frame* vw_bap_frame_clone(struct BAP_Frame *bap_frame)
 
 
 
-void vw_bap_frame_dump(struct BAP_Frame *bap_frame)
+void vag_bap_frame_dump(struct BAP_Frame *bap_frame)
 {
 	unsigned i;
 

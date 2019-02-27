@@ -18,7 +18,9 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 
-#include "vw-bap.h"
+#include <ncurses.h>
+
+#include "vag-bap.h"
 
 
 
@@ -68,38 +70,33 @@ int main(int argc, char **argv)
 {
   	fd_set rdfs;
 	int s;
-	int i;
-	int can_id_count;
-	unsigned *can_ids;
-	struct BAP_RXer **baps;
+	unsigned can_id;
+	struct BAP_RXer *bap;
+	unsigned node_id;
 
-	if (argc < 3) {
-		printf("syntax: %s IFNAME CAN_ID [CAN_ID CAN_ID ...]\n", argv[0]);
+	if (argc < 4) {
+		printf("syntax: %s IFNAME CAN_ID bap_node \n", argv[0]);
 		return 1;
 	}
 
-	can_id_count = argc - 2;
+	can_id = strtoul(argv[2], NULL, 0);
+	node_id = strtoul(argv[3], NULL, 0);
 
-	can_ids = calloc(can_id_count, sizeof(*can_ids));
-	baps = calloc(can_id_count, sizeof(*baps));
-	if (!can_ids || !baps) {
-		printf("Out of memory allocating meta structs.\n");
+	bap = vag_bap_rxer_alloc();
+	if (!bap) {
+		printf("Out of memory allocating BAP struct.\n");
 		return 1;
 	}
 
-	for (i = 0; i < can_id_count; i++) {
-		can_ids[i] = strtoul(argv[2 + i], NULL, 0);
-		baps[i] = vw_bap_rxer_alloc();
-		if (!baps[i]) {
-			printf("Out of memory allocating BAP struct.\n");
-			return 1;
-		}
+	printf("Listening for CAN ID: %x and Node %d\n", can_id, node_id);
 
-		printf("Listening for CAN ID: %x\n", can_ids[i]);
-	}
 
 
 	s = net_init(argv[1]);
+
+
+	initscr();
+
 
 	while (1) {
 		int retval;
@@ -125,19 +122,51 @@ int main(int argc, char **argv)
 				return 1;
 			}
 
-			for (i = 0; i < can_id_count; i++) {
-				if (can_ids[i] == frame.can_id) {
-					struct BAP_Frame *bap_frame;
-					struct BAP_RXer *bap = baps[i];
+			if (can_id == frame.can_id) {
+				struct BAP_Frame *bap_frame;
+				unsigned i;
 
-					bap_frame = vw_bap_handle_can_frame(bap, &frame);
-					if (bap_frame) {
-						printf("%03x:  ", frame.can_id);
-						vw_bap_frame_dump(bap_frame);
-						vw_bap_frame_free(bap_frame);
+				bap_frame = vag_bap_handle_can_frame(bap, &frame);
+				if (bap_frame && bap_frame->node == node_id) {
+					mvprintw(bap_frame->port, 0, "");
+
+					printw("%u. %2i/%-2i .%c%02i --",
+						bap_frame->opcode,
+						bap_frame->node,
+						bap_frame->port,
+						bap_frame->is_multiframe ? 'm' : 's',
+						bap_frame->len);
+
+					/* Limit huge packets */
+					if (bap_frame->len > 20) {
+						bap_frame->len = 20;
 					}
 
-					break;
+					/* Hex dump */
+					for (i = 0; i < bap_frame->len; i++) {
+						if (!(i % 4)) {
+							printw(" ");
+						}
+						printw("%02x", (unsigned char)(bap_frame->data[i]));
+					}
+
+					printw("\n");
+
+					/* ASCII dump */
+					mvprintw(bap_frame->port, 64, "");
+					for (i = 0; i < bap_frame->len; i++) {
+						unsigned char c = bap_frame->data[i];
+						if (!isprint(c) || c == '\n' || c == '\r') {
+							c = '.';
+						}
+						printw("%c", c);
+					}
+					printw("'");
+					printw("\r");
+
+					refresh();
+
+					vag_bap_frame_free(bap_frame);
 				}
 			}
 
@@ -145,7 +174,9 @@ int main(int argc, char **argv)
 		}
 	}
 
-	/* TODO: Free */
+	endwin();
+
+	vag_bap_rxer_free(bap);
 
 	close(s);
 
