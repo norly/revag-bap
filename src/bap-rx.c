@@ -17,7 +17,7 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 	//printf("Received BAP frame from CAN ID %03x\n", frame->can_id);
 
 	if (frame->can_dlc < 2) {
-		printf("Error: Frame too short\n");
+		VAG_DEBUG("Error: Frame too short\n");
 	}
 
 	if (frame->data[0] & 0x80) {
@@ -31,17 +31,17 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 			unsigned this_len;
 
 			if (frame->can_dlc < 4) {
-				printf("Error: Frame too short\n");
+				VAG_DEBUG("Error: Frame too short\n");
 			}
 
 			if (bap->mfchannel[mfchannel]) {
-				printf("bap_handle_can_frame: new start frame for open channel\n");
+				VAG_DEBUG("bap_handle_can_frame: new start frame for open channel\n");
 			}
 			bap->mfchannel[mfchannel] = NULL;
 
 			bap_frame = vag_bap_frame_alloc();
 			if (!bap_frame) {
-				printf("bap_handle_can_frame: Failed to allocate new frame\n");
+				VAG_DEBUG("bap_handle_can_frame: Failed to allocate new frame\n");
 				return NULL;
 			}
 
@@ -57,7 +57,7 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 			this_len = frame->can_dlc - 4;
 
 			if (this_len > bap_frame->len) {
-				printf("bap_handle_can_frame: this_len > len\n");
+				VAG_DEBUG("bap_handle_can_frame: this_len > len\n");
 
 				free(bap_frame);
 				bap->mfchannel[mfchannel] = NULL;
@@ -83,14 +83,14 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 			bap_frame = bap->mfchannel[mfchannel];
 
 			if (!bap_frame) {
-				printf("bap_handle_can_frame: continuation frame for unknown mf channel %d\n",
+				VAG_DEBUG("bap_handle_can_frame: continuation frame for unknown mf channel %d\n",
 					mfchannel);
 			}
 
 			this_len = frame->can_dlc - 1;
 
 			if ((bap->len_done[mfchannel] + this_len) > bap_frame->len) {
-				printf("bap_handle_can_frame: len_done + this_len > len\n");
+				VAG_DEBUG("bap_handle_can_frame: len_done + this_len > len\n");
 
 				free(bap_frame);
 				bap->mfchannel[mfchannel] = NULL;
@@ -117,7 +117,7 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 
 		bap_frame = calloc(1, sizeof(struct BAP_Frame));
 		if (!bap_frame) {
-			printf("bap_handle_can_frame: Failed to allocate new frame\n");
+			VAG_DEBUG("bap_handle_can_frame: Failed to allocate new frame\n");
 			return NULL;
 		}
 

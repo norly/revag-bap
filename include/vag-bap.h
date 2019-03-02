@@ -1,6 +1,9 @@
 #ifndef __VAG_BAP_H__
 #define __VAG_BAP_H__
 
+#include <stdio.h>
+#define VAG_DEBUG(...) do { fprintf(stdout, __VA_ARGS__); } while(0)
+
 #include <linux/can.h>
 
 
