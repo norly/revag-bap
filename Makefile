@@ -1,21 +1,60 @@
-CFLAGS += -Wall -g
+LIBNAME := vag-bap
 
-BAPLIB = vag-bap.c vag-bap-frame.c vag-bap-rx.c vag-bap-tx.c
+BUILDDIR  := build
+STATICLIB := $(BUILDDIR)/lib$(LIBNAME).a
 
-EXES = vag-bap-dump vag-bap-sniffer vag-bap-send
+INCLUDEDIR := include
+HEADERS    := $(shell find $(INCLUDEDIR)/)
+
+SRCDIR  := src
+SOURCES := $(shell find $(SRCDIR)/ -iname "*.c")
+OBJS    := $(patsubst %.c, $(BUILDDIR)/%.o, $(SOURCES))
+
+INCLUDES := $(patsubst %, -I%, $(INCLUDEDIR))
+CFLAGS   := -Wall -g
+
+TOOLDIR     := tools
+TOOLSOURCES := $(shell find $(TOOLDIR)/ -iname "*.c")
+TOOLEXES    := $(patsubst %.c, $(BUILDDIR)/%, $(TOOLSOURCES))
+TOOLLIBS    := -lncurses
 
 
-all: $(EXES)
 
 
-vag-bap-dump: vag-bap-dump.c $(BAPLIB)
 
-vag-bap-sniffer: vag-bap-sniffer.c $(BAPLIB)
-	gcc -o $@ $^ -lncurses
+.PHONY: tools
+tools: $(TOOLEXES)
 
-vag-bap-send: vag-bap-send.c $(BAPLIB)
+
+$(BUILDDIR)/$(TOOLDIR)/%: $(TOOLDIR)/%.c $(HEADERS) $(STATICLIB)
+	@if [ ! -d $(dir $@) ] ; then mkdir -p $(dir $@) ; fi
+	$(CC) $(INCLUDES) $(CFLAGS) -o $@ $< $(STATICLIB) $(TOOLLIBS)
+
+
+
+.PHONY: lib
+lib: $(STATICLIB)
+
+$(STATICLIB): $(OBJS)
+	@if [ ! -d $(BUILDDIR) ] ; then echo "Error: Build dir '$(BUILDDIR)' does not exist." ; false ; fi
+	ar rcs $@ $^
+
+
+$(BUILDDIR)/$(SRCDIR)/%.o: $(SRCDIR)/%.c $(HEADERS)
+	@if [ ! -d $(dir $@) ] ; then mkdir -p $(dir $@) ; fi
+	$(CC) $(INCLUDES) $(CFLAGS) -c -o $@ $<
+
 
 
 .PHONY: clean
 clean:
-	rm -f $(EXES)
+	rm -f $(STATICLIB)
+	rm -f $(OBJS)
+	rm -f $(TOOLEXES)
+	rm -rf $(BUILDDIR)/
+
+
+.PHONY: distclean
+distclean: clean
+	find . -xdev -name "*~" -exec rm {} \;
+	find . -xdev -name "core" -exec rm {} \;
