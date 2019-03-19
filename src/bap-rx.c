@@ -30,8 +30,9 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 			unsigned short header;
 			unsigned this_len;
 
+			/* Sanity checks */
 			if (frame->can_dlc < 4) {
-				VAG_DEBUG("Error: Frame too short\n");
+				VAG_DEBUG("bap_handle_can_frame: Frame too short\n");
 			}
 
 			if (bap->mfchannel[mfchannel]) {
@@ -39,6 +40,7 @@ struct BAP_Frame* vag_bap_handle_can_frame(struct BAP_RXer *bap, struct can_fram
 			}
 			bap->mfchannel[mfchannel] = NULL;
 
+			/* Frame looks okay, start parsing */
 			bap_frame = vag_bap_frame_alloc();
 			if (!bap_frame) {
 				VAG_DEBUG("bap_handle_can_frame: Failed to allocate new frame\n");

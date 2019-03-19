@@ -6,6 +6,7 @@
  * by the Free Software Foundation.
  */
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>

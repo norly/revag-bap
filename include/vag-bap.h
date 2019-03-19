@@ -64,7 +64,7 @@ struct BAP_TXer {
 	/* Temporary storage for frames not yet fully sent */
 	struct BAP_Frame *slot[4];
 
-	/* How many bytes have we already sent on each channel? */
+	/* How many bytes have we already sent on each open slot? */
 	BAP_FrameLen slot_done[4];
 };
 
