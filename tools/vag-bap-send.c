@@ -91,7 +91,7 @@ static void can_tx(int socket, struct can_frame *frame)
 int main(int argc, char **argv)
 {
   	fd_set wfds;
-	int s, ret;
+	int s;
 	struct can_frame frame;
 	struct BAP_TXer *bap;
 	struct BAP_Frame *bap_frame;
@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 	printf("Will send frame:\n");
 	vag_bap_frame_dump(bap_frame);
 
-	ret = vag_bap_txer_queue(bap, bap_frame, &frame);
+	/* ret = */ vag_bap_txer_queue(bap, bap_frame, &frame);
 	frame.can_id = can_id;
 	can_tx(s, &frame);
 
