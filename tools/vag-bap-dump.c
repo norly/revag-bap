@@ -66,7 +66,7 @@ static int net_init(char *ifname)
 
 int main(int argc, char **argv)
 {
-  	fd_set rdfs;
+	fd_set rfds;
 	int s;
 	int i;
 	int can_id_count;
@@ -104,10 +104,10 @@ int main(int argc, char **argv)
 	while (1) {
 		int retval;
 
-		FD_ZERO(&rdfs);
-		FD_SET(s, &rdfs);
+		FD_ZERO(&rfds);
+		FD_SET(s, &rfds);
 
-		retval = select(s+1, &rdfs, NULL, NULL, NULL);
+		retval = select(s+1, &rfds, NULL, NULL, NULL);
 		/* We currently rely on Linux timeout behavior here,
 		 * i.e. the timeout now reflects the remaining time */
 		if (retval < 0) {
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 			return 1;
 		} else if (!retval) {
 			/* Timeout, we NEED to check this first */
-		} else if (FD_ISSET(s, &rdfs)) {
+		} else if (FD_ISSET(s, &rfds)) {
 			struct can_frame frame;
 			ssize_t ret;
 
